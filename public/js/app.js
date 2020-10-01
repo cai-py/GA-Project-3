@@ -1,13 +1,23 @@
 class App extends React.Component {
     state = {
-        content: '',
-        character: '',
-        offices: []
+        content: {},
+        character: {},
     }
 
-    //DON'T LOAD UNTIL EVERYTHING IS MOUNTED ON THE DOM
-    componentDidMount = () => {
+    findData = (event) => {
+      event.preventDefault();
+      axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(
+        (response) => {
+          console.log(response)
+          this.setState(
+            {
+              content:response.data.data,
+              character:response.data.data.character,
 
+            }
+          )
+        }
+      )
     }
 
     //DELETE -- DELETE
@@ -40,12 +50,33 @@ class App extends React.Component {
     render = () => {
         return(
             <div>
-                
+            <Data
+              quote={this.state.content.content}
+              firstname={this.state.character.firstname}
+              lastname={this.state.character.lastname}>
+            </Data>
+            <form onClick={this.findData}>
+            <button type="button" name="button">Get Question</button>
+            </form>
             </div>
         )
-    
     }
-
 }
 
-ReactDOM.render(<App/>, document.querySelector('main'))
+
+class Data extends React.Component {
+  render = () => {
+    return <dl>
+    <dt>Quote:</dt>
+    <dd>{this.props.quote}</dd>
+
+    <dt>Answer</dt>
+    <dd>{this.props.firstname} {this.props.lastname}</dd>
+    </dl>
+  }
+}
+
+
+ReactDOM.render(
+  <App/>,
+  document.querySelector('main'))
