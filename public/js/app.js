@@ -50,6 +50,7 @@ class App extends React.Component {
     render = () => {
         return(
             <div>
+            <Nav />
             <Data
               quote={this.state.content.content}
               firstname={this.state.character.firstname}
@@ -63,6 +64,17 @@ class App extends React.Component {
     }
 }
 
+class Nav extends React.Component {
+  render = () => {
+    return <div>
+    <ul id="navUl">
+      <li className="navLi"><a href="#">Create</a></li>
+      <li className="navLi"><a href="#">Sign Up</a></li>
+      <li className="navLi"><a href="#">Log In</a></li>
+    </ul>
+    </div>
+  }
+}
 
 class Data extends React.Component {
   render = () => {
