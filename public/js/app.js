@@ -2,7 +2,7 @@ class App extends React.Component {
     state = {
       officeCharacters: null,
       chosenCharacterId: null,
-      username: 'null',
+      username: null,
       content: {},
       character: {},
     }
