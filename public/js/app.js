@@ -13,6 +13,8 @@ class App extends React.Component {
           this.setState(
             {
               officeCharacters: response.data.data,
+              correctfirst:response.data.data,
+              correctlast:response.data.data,
               randomChar1:findRandom(response.data.data.length),
               randomChar2:findRandom(response.data.data.length),
               randomChar3:findRandom(response.data.data.length)
@@ -62,8 +64,8 @@ class App extends React.Component {
             </Data>
             <Options
               index1={this.state.randomChar1}
-              correctfirst={this.state.character.firstname}
-              correctlast={this.state.character.lastname}
+              correctfirst={this.state.character.correctfirst}
+              correctlast={this.state.character.correctlast}
               index2={this.state.randomChar2}
               index3={this.state.randomChar3}
               officeCharacters={this.state.officeCharacters}
