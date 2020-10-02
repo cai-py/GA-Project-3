@@ -50,7 +50,6 @@ class App extends React.Component {
       this.setState({
         chosenCharacterId: id
       })
-      this.newQuote()
     }
 
     login = (event) => {
@@ -63,6 +62,7 @@ class App extends React.Component {
         content: {},
         character: {}
       })
+      this.newQuote()
     }
     //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
     render = () => {
@@ -94,7 +94,8 @@ class App extends React.Component {
                     quoteCharacterId={this.state.character._id}
                     chosenCharacterId={this.state.chosenCharacterId}
                     checkAnswer={this.checkAnswer}
-                    newQuote={this.newQuote}>
+                    newQuote={this.newQuote}
+                    reset={this.reset}>
                   </Options>
                 </div>
               }
