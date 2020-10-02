@@ -1,7 +1,51 @@
-body {
-    background: url('https://3.bp.blogspot.com/-ZmUbAv4RTT8/WsoE_NoKicI/AAAAAAAACXY/iMo2b27Jj0YRikaAL27efBudvdznXLNoQCLcBGAs/s640/The%2BOffice%2BPoster.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+/* * {
+  border: solid gold;
+} */
+
+/* Nav Bar */
+nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navImg {
+  width: 110px;
+  float: left;
+}
+
+.navLi {
+  float: right;
+}
+
+.navLi a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navLi a:hover {
+  color: whitesmoke;
+  text-decoration: none;
 }
 
 
+/* quote and answer */
+
+.data-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.quote-text {
+  height: 150px;
+}
+
+#formbtn {
+    display: flex;
+    align-self: flex-end;
+}
