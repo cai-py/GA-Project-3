@@ -64,8 +64,8 @@ class App extends React.Component {
             </Data>
             <Options
               index1={this.state.randomChar1}
-              correctfirst={this.state.character.correctfirst}
-              correctlast={this.state.character.correctlast}
+              correctfirst={this.state.character.firstname}
+              correctlast={this.state.character.lastname}
               index2={this.state.randomChar2}
               index3={this.state.randomChar3}
               officeCharacters={this.state.officeCharacters}
@@ -119,7 +119,7 @@ class Options extends React.Component {
         <div>
             <div>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
             <br/>
-            {this.props.correctfirst} {this.props.correctlast}
+            {this.props.officeCharacters.correctfirst} {this.props.officeCharacters.correctlast}
             <br/>
             {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
             <br/>
