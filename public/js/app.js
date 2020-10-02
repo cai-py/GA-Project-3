@@ -1,3 +1,4 @@
+
 class App extends React.Component {
     state = {
       officeCharacters: null,
@@ -11,13 +12,18 @@ class App extends React.Component {
         (response) => {
           this.setState(
             {
-              officeCharacters: response.data.data
+              officeCharacters: response.data.data,
+              randomChar1:findRandom(response.data.data.length),
+              randomChar2:findRandom(response.data.data.length),
+              randomChar3:findRandom(response.data.data.length)
             }
           )
           // console.log(this.state.officeCharacters)
         }
       )
     }
+
+
 
     findData = (event) => {
       event.preventDefault();
@@ -55,6 +61,11 @@ class App extends React.Component {
               findData={this.findData}>
             </Data>
             <Options
+              index1={this.state.randomChar1}
+              correctfirst={this.state.character.firstname}
+              correctlast={this.state.character.lastname}
+              index2={this.state.randomChar2}
+              index3={this.state.randomChar3}
               officeCharacters={this.state.officeCharacters}
               quoteCharacter={this.state.character}
               chosenCharacterId={this.state.chosenCharacterId}
@@ -86,7 +97,7 @@ class Data extends React.Component {
         <dd className="quote-text">{this.props.quote}</dd>
 
           <dt>Answer</dt>
-        <dd>{this.props.firstname} {this.props.lastname}</dd> 
+        <dd>{this.props.firstname} {this.props.lastname}</dd>
       </dl>
       <button onClick={this.props.findData} type="button" name="button">Get Quote</button>
     </div>
@@ -94,13 +105,26 @@ class Data extends React.Component {
   }
 }
 
+ const findRandom = (max) => {
+  return Math.floor(Math.random() * max)
+}
+
+
 class Options extends React.Component {
   render = () => {
     return <div className="options-container">
       {(this.props.officeCharacters === null) ? null:
         <div>
-          {this.props.officeCharacters.map(character => {return(
-            <button id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
+            <div>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
+            <br/>
+            {this.props.correctfirst} {this.props.correctlast}
+            <br/>
+            {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
+            <br/>
+            {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
+            </div><br/>
+            {this.props.officeCharacters.map(character => {return(
+            <button key={character._id}      onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
           )})}
           {/* {(this.props.chosenCharacterId === this.props.quoteCharacter.firstname)
             ?<h1>correct</h1>
