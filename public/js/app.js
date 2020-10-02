@@ -106,6 +106,7 @@ class Options extends React.Component {
             ?<h1>correct</h1>
             :<h1>wrong</h1>
           } */}
+          
         </div>
         
         
