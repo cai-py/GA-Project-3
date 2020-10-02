@@ -17,17 +17,27 @@ class App extends React.Component {
           // console.log(this.state.officeCharacters)
         }
       )
-    }
-
-    findData = (event) => {
-      event.preventDefault();
       axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(
         (response) => {
           this.setState(
             {
               content:response.data.data,
               character:response.data.data.character,
+            }
+          )
+          console.log(this.state.character)
+        }
+      )
+    }
 
+    newQuote = (event) => {
+      // event.preventDefault();
+      axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(
+        (response) => {
+          this.setState(
+            {
+              content:response.data.data,
+              character:response.data.data.character,
             }
           )
           console.log(this.state.character)
@@ -39,8 +49,9 @@ class App extends React.Component {
       event.preventDefault()
       const id = event.target.id
       this.setState({
-        chosenCharacter: event.target.id
+        chosenCharacterId: id
       })
+      this.newQuote()
     }
 
     //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
@@ -56,9 +67,10 @@ class App extends React.Component {
             </Data>
             <Options 
               officeCharacters={this.state.officeCharacters}
-              quoteCharacter={this.state.character}
+              quoteCharacterId={this.state.character._id}
               chosenCharacterId={this.state.chosenCharacterId}
-              checkAnswer={this.checkAnswer}>
+              checkAnswer={this.checkAnswer}
+              newQuote={this.newQuote}>
             </Options>
             </div>
         )
@@ -88,7 +100,6 @@ class Data extends React.Component {
         {/* <dt>Answer</dt>
         <dd>{this.props.firstname} {this.props.lastname}</dd> */}
       </dl>
-      <button onClick={this.props.findData} type="button" name="button">Get Quote</button>
     </div>
     
   }
@@ -100,13 +111,12 @@ class Options extends React.Component {
       {(this.props.officeCharacters === null) ? null: 
         <div>
           {this.props.officeCharacters.map(character => {return(
-            <button id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
+            <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
           )})}
-          {/* {(this.props.chosenCharacterId === this.props.quoteCharacter.firstname) 
-            ?<h1>correct</h1>
-            :<h1>wrong</h1>
-          } */}
-          
+          {(this.props.chosenCharacterId === this.props.quoteCharacterId) 
+            ?alert('correct')
+            :null
+          }
         </div>
         
         
