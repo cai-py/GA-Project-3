@@ -6,13 +6,16 @@ class App extends React.Component {
       content: {},
       character: {},
     }
-    
+
     componentDidMount = () => {
       axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(
         (response) => {
           this.setState(
             {
-              officeCharacters: response.data.data
+              officeCharacters: response.data.data,
+              randomChar1:findRandom(response.data.data.length),
+              randomChar2:findRandom(response.data.data.length),
+              randomChar3:findRandom(response.data.data.length)
             }
           )
           // console.log(this.state.officeCharacters)
@@ -42,15 +45,14 @@ class App extends React.Component {
           )
         }
       )
-    }  
-    
+    }
+
     checkAnswer = (event) => {
       event.preventDefault()
       const id = event.target.id
       this.setState({
         chosenCharacterId: id
       })
-      this.newQuote()
     }
 
     login = (event) => {
@@ -63,6 +65,7 @@ class App extends React.Component {
         content: {},
         character: {}
       })
+      this.newQuote()
     }
     //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
     render = () => {
@@ -90,15 +93,21 @@ class App extends React.Component {
                     findData={this.findData}>
                   </Quote>
                   <Options
+                    index1={this.state.randomChar1}
+                    correctfirst={this.state.character.correctfirst}
+                    correctlast={this.state.character.correctlast}
+                    index2={this.state.randomChar2}
+                    index3={this.state.randomChar3}
                     officeCharacters={this.state.officeCharacters}
                     quoteCharacterId={this.state.character._id}
                     chosenCharacterId={this.state.chosenCharacterId}
                     checkAnswer={this.checkAnswer}
-                    newQuote={this.newQuote}>
+                    newQuote={this.newQuote}
+                    reset={this.reset}>
                   </Options>
                 </div>
               }
-              
+
             </div>
         )
     }
@@ -127,27 +136,39 @@ class Quote extends React.Component {
         <dd>{this.props.firstname} {this.props.lastname}</dd> */}
       </dl>
     </div>
-    
+
   }
+}
+
+const findRandom = (max) => {
+ return Math.floor(Math.random() * max)
 }
 
 class Options extends React.Component {
   render = () => {
     return <div className="options-container">
-      {(this.props.officeCharacters === null) ? null: 
+      {(this.props.officeCharacters === null) ? null:
         <div>
+        <div>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
+          <br/>
+          {this.props.correctfirst} {this.props.correctlast}
+          <br/>
+          {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
+          <br/>
+          {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
+          </div><br/>
           {this.props.officeCharacters.map(character => {return(
             <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
           )})}
-          {(this.props.chosenCharacterId === this.props.quoteCharacterId) 
+          {(this.props.chosenCharacterId === this.props.quoteCharacterId)
             ?alert('correct')
             :null
           }
         </div>
-        
-        
+
+
       }
-      
+
     </div>
   }
 }
