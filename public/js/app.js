@@ -1,14 +1,28 @@
 class App extends React.Component {
     state = {
-        content: {},
-        character: {},
+      officeCharacters: null,
+      chosenCharacterId: null,
+      content: {},
+      character: {},
+    }
+
+    componentDidMount = () => {
+      axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(
+        (response) => {
+          this.setState(
+            {
+              officeCharacters: response.data.data
+            }
+          )
+          // console.log(this.state.officeCharacters)
+        }
+      )
     }
 
     findData = (event) => {
       event.preventDefault();
       axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(
         (response) => {
-          console.log(response)
           this.setState(
             {
               content:response.data.data,
@@ -16,49 +30,36 @@ class App extends React.Component {
 
             }
           )
+          console.log(this.state.character)
         }
       )
     }
 
-    //DELETE -- DELETE
-    deleteOffice = (event) => {
-
-    }
-
-    //UPDATE -- PUT
-    updateOffice = (event) => {
-
-    }
-
-    //HOW TO SET THE CHANGES
-    handleChange = (event) => {
-
-    }
-
-    //HOW TO ADD AFTER SUBMIT -- GET THE INFO AFTER POST & ADD IT, PREVENT AUTO REFRESH
-    handleSubmit = (event) => {
-
-    }
-
-    //TOGGLE FORM
-    toggleForm = (event) => {
-
+    checkAnswer = (event) => {
+      event.preventDefault()
+      const id = event.target.id
+      this.setState({
+        chosenCharacter: event.target.id
+      })
     }
 
     //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
-
     render = () => {
         return(
-            <div>
-            <Nav />
+            <div className="container">
+            <Nav/>
             <Data
               quote={this.state.content.content}
               firstname={this.state.character.firstname}
-              lastname={this.state.character.lastname}>
+              lastname={this.state.character.lastname}
+              findData={this.findData}>
             </Data>
-            <form onClick={this.findData}>
-            <button type="button" name="button">Get Question</button>
-            </form>
+            <Options
+              officeCharacters={this.state.officeCharacters}
+              quoteCharacter={this.state.character}
+              chosenCharacterId={this.state.chosenCharacterId}
+              checkAnswer={this.checkAnswer}>
+            </Options>
             </div>
         )
     }
@@ -66,25 +67,52 @@ class App extends React.Component {
 
 class Nav extends React.Component {
   render = () => {
-    return <div>
-    <ul id="navUl">
-      <li className="navLi"><a href="#">Create</a></li>
-      <li className="navLi"><a href="#">Sign Up</a></li>
-      <li className="navLi"><a href="#">Log In</a></li>
-    </ul>
-    </div>
+    return <nav>
+      <img className="navImg" src="https://iamavig.files.wordpress.com/2018/05/the-office-logo-e1527162138936.jpg?w=529" alt="The Office"></img>
+      <ul id="navUl">
+        {/* <li className="navLi"><a href="#">Create</a></li> */}
+        <li className="navLi"><a href="#">Sign Up</a></li>
+        <li className="navLi"><a href="#">Log In</a></li>
+      </ul>
+    </nav>
   }
 }
 
 class Data extends React.Component {
   render = () => {
-    return <dl>
-    <dt>Quote:</dt>
-    <dd>{this.props.quote}</dd>
+    return <div className="data-container">
+      <dl>
+        <dt>Quote:</dt>
+        <dd className="quote-text">{this.props.quote}</dd>
 
-    <dt>Answer</dt>
-    <dd>{this.props.firstname} {this.props.lastname}</dd>
-    </dl>
+          <dt>Answer</dt>
+        <dd>{this.props.firstname} {this.props.lastname}</dd> 
+      </dl>
+      <button onClick={this.props.findData} type="button" name="button">Get Quote</button>
+    </div>
+
+  }
+}
+
+class Options extends React.Component {
+  render = () => {
+    return <div className="options-container">
+      {(this.props.officeCharacters === null) ? null:
+        <div>
+          {this.props.officeCharacters.map(character => {return(
+            <button id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
+          )})}
+          {/* {(this.props.chosenCharacterId === this.props.quoteCharacter.firstname)
+            ?<h1>correct</h1>
+            :<h1>wrong</h1>
+          } */}
+
+        </div>
+
+
+      }
+
+    </div>
   }
 }
 

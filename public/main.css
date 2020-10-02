@@ -1,7 +1,9 @@
-
+/* * {
+  border: solid gold;
+} */
 
 /* Nav Bar */
-#navUl {
+nav {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -9,13 +11,18 @@
   background-color: #333;
 }
 
-.navLi {
+.navImg {
+  width: 110px;
   float: left;
+}
+
+.navLi {
+  float: right;
 }
 
 .navLi a {
   display: block;
-  color: black;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -26,8 +33,22 @@
   text-decoration: none;
 }
 
+<<<<<<< HEAD
 body {
     background: url('https://3.bp.blogspot.com/-ZmUbAv4RTT8/WsoE_NoKicI/AAAAAAAACXY/iMo2b27Jj0YRikaAL27efBudvdznXLNoQCLcBGAs/s640/The%2BOffice%2BPoster.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+=======
+
+/* quote and answer */
+
+.data-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.quote-text {
+  height: 150px;
+}
+>>>>>>> 17629c2c5bcadf55bdd3971abca75509e36897b2
