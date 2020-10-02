@@ -2,13 +2,14 @@
   border: solid gold;
 } */
 
-/* Nav Bar */
-nav {
-  list-style: none;
+/*nav*/
+.nav-container {
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #333;
+
+  display: flex;
 }
 
 .navImg {
@@ -16,31 +17,33 @@ nav {
   float: left;
 }
 
-.navLi {
-  float: right;
-}
-
-.navLi a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.navLi a:hover {
+.welcome {
   color: whitesmoke;
-  text-decoration: none;
+  border: 3px solid green;
+  
+  margin: auto;
 }
 
 
-/* quote and answer */
+/*quote*/
 
-.data-container {
+.quote-container {
   width: 90%;
   margin: 0 auto;
 }
 
 .quote-text {
   height: 150px;
+}
+
+
+/*options*/
+
+.options-container div{
+  width: 90%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
 }
