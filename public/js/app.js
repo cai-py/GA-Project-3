@@ -2,6 +2,7 @@ class App extends React.Component {
     state = {
         content: {},
         character: {},
+        show: false
     }
 
     findData = (event) => {
@@ -42,7 +43,11 @@ class App extends React.Component {
 
     //TOGGLE FORM
     toggleForm = (event) => {
-
+        toggleForm = (event) => {
+          this.setState({
+            show: !this.state.show
+          })
+      }
     }
 
     //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
@@ -50,14 +55,17 @@ class App extends React.Component {
     render = () => {
         return(
             <div>
-            <Data
-              quote={this.state.content.content}
+             <Data> 
+              {this.state.show ?<div quote={this.state.content.content} 
               firstname={this.state.character.firstname}
-              lastname={this.state.character.lastname}>
+              lastname={this.state.character.lastname}> </div> : null}
             </Data>
+            
+            <Create>
+            </Create>
             <form onClick={this.findData}>
             <button type="button" name="button">Get Question</button>
-            </form>
+            </form> 
             </div>
         )
     }
@@ -76,6 +84,17 @@ class Data extends React.Component {
   }
 }
 
+
+class Create extends React.Component {
+    render = () => {
+        return <h2>Create Your Own Trivia!</h2>
+        <label htmlFor="content">Content: </label>
+        <input id="content" onChange={this.props.quote} type="text"/>
+        <br />
+        <label htmlFor="answer">Answer: </label>
+        <input class="answer" onChange={this.props.firstname}
+    }
+}
 
 ReactDOM.render(
   <App/>,
