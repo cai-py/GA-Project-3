@@ -46,7 +46,7 @@ office.put('/:id', (req, res) => {
 //===========================
 
 office.delete('/:id', (req, res) => {
-  Office.findByIdAndRemove(req.params.id, (err, deletedFood) => {
+  Office.findByIdAndRemove(req.params.id, (err, deletedComment) => {
     Office.find({}, (err, foundQuestion) => {
       res.json(foundQuestion)
     })
