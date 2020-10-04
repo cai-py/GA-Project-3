@@ -59,7 +59,6 @@ class App extends React.Component {
   login = (event) => {
     console.log(event.target.username.value)
     this.setState({username: event.target.username.value})
-    this.newQuote()
   }
 
   reset = () => {
@@ -164,7 +163,9 @@ render = () => {
         {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
         </button>
         </div><br/>
-        
+        {this.props.officeCharacters.map(character => {return(
+          <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
+        )})}
         {(this.props.chosenCharacterId === this.props.quoteCharacterId)
           ?alert('correct')
           :null
