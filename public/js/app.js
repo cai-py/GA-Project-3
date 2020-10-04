@@ -15,6 +15,7 @@ class App extends React.Component {
             {
               officeCharacters: response.data.data,
               randomChar1:findRandom(response.data.data.length),
+              character:response.data.data.character,
               randomChar2:findRandom(response.data.data.length),
               randomChar3:findRandom(response.data.data.length)
             }
@@ -150,8 +151,8 @@ class App extends React.Component {
                   </Quote>
                   <Options
                     index1={this.state.randomChar1}
-                    correctfirst={this.state.character.correctfirst}
-                    correctlast={this.state.character.correctlast}
+                    correctfirst={this.state.character.firstname}
+                    correctlast={this.state.character.lastname}
                     index2={this.state.randomChar2}
                     index3={this.state.randomChar3}
                     officeCharacters={this.state.officeCharacters}
@@ -209,13 +210,18 @@ class Options extends React.Component {
     return <div className="options-container">
       {(this.props.officeCharacters === null) ? null:
         <div>
-        <div>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
-          <br/>
+        <div>
+        <button>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
+        </button>
+          <button>
           {this.props.correctfirst} {this.props.correctlast}
-          <br/>
+          </button>
+          <button>
           {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
-          <br/>
+          </button>
+          <button>
           {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
+          </button>
           </div><br/>
           {this.props.officeCharacters.map(character => {return(
             <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
