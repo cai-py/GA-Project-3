@@ -5,6 +5,7 @@ class App extends React.Component {
     username: null,
     content: {},
     character: {},
+    answers: []
   }
 
   componentDidMount = () => {
@@ -145,41 +146,38 @@ const findRandom = (max) => {
 return Math.floor(Math.random() * max)
 }
 
+const characters = () => {
+  return this.props.officeCharacters
+}
+
 class Options extends React.Component {
+
 render = () => {
-  return <div className="options-container">
-    {(this.props.officeCharacters === null) ? null:
-      <div>
-      <div>
-      <button>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
+  return <div>
+
+  <dl>
+    <dt>Choose your answer:</dt>
+    <dd><button key={characters._id} id={characters._id}  onClick={this.props.checkAnswer}>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
+     </button>
+    <button id={characters._id} onClick={this.props.checkAnswer}>
+    {this.props.correctfirst} {this.props.correctlast}
+    </button>
+    <button id={characters._id} onClick={this.props.checkAnswer}>
+      {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
+    </button>
+    <button id={characters._id} onClick={this.props.checkAnswer}>
+      {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
       </button>
-        <button>
-        {this.props.correctfirst} {this.props.correctlast}
-        </button>
-        <button>
-        {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
-        </button>
-        <button>
-        {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
-        </button>
-        </div><br/>
-        {this.props.officeCharacters.map(character => {return(
-          <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
-        )})}
-        {(this.props.chosenCharacterId === this.props.quoteCharacterId)
-          ?alert('correct')
-          :null
-        }
-      </div>
+    </dd>
+  </dl>
+  {(this.props.chosenCharacterId === this.props.quoteCharacterId)
+           ?alert('correct')
+           :null
+  }
+</div>
 
-
-    }
-
-  </div>
 }
 }
-
-
 ReactDOM.render(
 <App/>,
 document.querySelector('main'))
