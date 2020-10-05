@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 // CONFIGURATION
 const app = express()
 require('dotenv').config()
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3000
 
 // DATABASE
 // const MONGODB_URI = process.env.MONGODB_URI
@@ -32,9 +32,9 @@ app.use(express.json()) //use .json(), not .urlencoded()
 app.use(express.static('public'))
 
 // ROUTES / CONTROLLERS
-// const peopleController = require('./controllers/animals_controller.js')
-// app.use('/animals', peopleController)
-app.get('/', (req,res) => {
+const commentsController = require('./controllers/comments_controller.js')
+app.use('/', commentsController)
+app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
