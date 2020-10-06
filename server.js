@@ -8,12 +8,12 @@ require('dotenv').config()
 const PORT = process.env.PORT || 3004
 
 // DATABASE
-// const MONGODB_URI = process.env.MONGODB_URI
-// mongoose.connect(MONGODB_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false
-// })
+const MONGODB_URI = process.env.MONGODB_URI
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
 
 // Error / success
 mongoose.connection.on('error', err =>
@@ -32,11 +32,12 @@ app.use(express.json()) //use .json(), not .urlencoded()
 app.use(express.static('public'))
 
 // ROUTES / CONTROLLERS
-// const peopleController = require('./controllers/animals_controller.js')
-// app.use('/animals', peopleController)
-app.get('/', (req,res) => {
-    res.send('Hello World')
-})
+const officeController = require('./controllers/office_controllers.js')
+app.use('/office', officeController)
+
+const usersController = require('./controllers/users_controller.js')
+app.use('/user', usersController)
+
 
 // LISTENER
 app.listen(PORT, () => {
