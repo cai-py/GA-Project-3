@@ -4,7 +4,8 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: null,
     content: {},
-    character: {},
+    character: {firstname: ''},
+    users: []
   }
 
   componentDidMount = () => {
@@ -57,8 +58,17 @@ class App extends React.Component {
   }
 
   login = (event) => {
-    console.log(event.target.username.value)
+    event.preventDefault()
+    // console.log(event.target.username.value)
     this.setState({username: event.target.username.value})
+    axios
+      .post('/user/new', this.state)
+      .then(response => 
+        this.setState({
+          users: response.data
+        })
+      )
+    
   }
 
   reset = () => {
@@ -70,47 +80,59 @@ class App extends React.Component {
   }
   //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
   render = () => {
-      return(
-          <div className="container">
-            {(this.state.username === null)
-              ?<div>
-                {/* <button onClick={this.login}>Login</button> */}
-                <form onSubmit={this.login}>
-                  <label htmlFor="username">Username</label>
-                  <input type="text" id="username"></input>
-
-                  <input type="submit" value="play"/>
-                </form>
-              </div>
-              :<div>
-                {console.log(this.state.character)}
-                <Nav
-                  username={this.state.username}>
-                </Nav>
-                <Quote
-                  quote={this.state.content.content}
-                  firstname={this.state.character.firstname}
-                  lastname={this.state.character.lastname}
-                  findData={this.findData}>
-                </Quote>
-                <Options
-                  index1={this.state.randomChar1}
-                  correctfirst={this.state.character.firstname}
-                  correctlast={this.state.character.lastname}
-                  index2={this.state.randomChar2}
-                  index3={this.state.randomChar3}
-                  officeCharacters={this.state.officeCharacters}
-                  quoteCharacterId={this.state.character._id}
-                  chosenCharacterId={this.state.chosenCharacterId}
-                  checkAnswer={this.checkAnswer}
-                  newQuote={this.newQuote}
-                  reset={this.reset}>
-                </Options>
-              </div>
-            }
-
+    return(
+      <div className="container">
+        {(this.state.username === null)
+          ?<div>
+            <Login
+              login={this.login}>
+            </Login>
           </div>
-      )
+          :<div>
+            {console.log(this.state.character)}
+            <Nav
+              username={this.state.username}>
+            </Nav>
+            <Quote
+              quote={this.state.content.content}
+              firstname={this.state.character.firstname}
+              lastname={this.state.character.lastname}
+              findData={this.findData}>
+            </Quote>
+            <Options
+              index1={this.state.randomChar1}
+              correctfirst={this.state.character.firstname}
+              correctlast={this.state.character.lastname}
+              index2={this.state.randomChar2}
+              index3={this.state.randomChar3}
+              officeCharacters={this.state.officeCharacters}
+              quoteCharacterId={this.state.character._id}
+              chosenCharacterId={this.state.chosenCharacterId}
+              checkAnswer={this.checkAnswer}
+              newQuote={this.newQuote}
+              reset={this.reset}>
+            </Options>
+          </div>
+        }
+
+      </div>
+    )
+  }
+}
+
+class Login extends React.Component {
+  render = () => {
+    return (
+      <div className="login-container">
+        <form onSubmit={this.props.login}>
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" name="username"></input>
+
+          <input type="submit" value="play"/>
+        </form>
+      </div>
+      
+    )
   }
 }
 
