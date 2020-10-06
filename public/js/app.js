@@ -4,7 +4,7 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: null,
     content: {},
-    character: {firstname: ''},
+    character: {},
     users: []
   }
 
