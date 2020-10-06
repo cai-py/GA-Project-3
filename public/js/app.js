@@ -2,7 +2,7 @@ class App extends React.Component {
     state = {
       officeCharacters: null,
       chosenCharacterId: null,
-      username: null,
+      username: 'hello',
       content: {},
       character: {},
       comment: []
@@ -253,18 +253,18 @@ class DeleteAndEdit extends React.Component {
             <button className="btn btn-danger" value={comment._id} onClick={this.props.deleteComment}>Delete
             </button>
             <details>
-                                <summary>
-                                    <i className="fas fa-pencil-alt"></i>
-                                </summary>
-                                <form onSubmit={this.props.updateComment} id={comment._id}>
-                            <label className="form-group" htmlFor="comment">Title: </label>
-                            <br />
-                            <input className="form-control" type="textarea" id="comment" onChange={this.props.handleChange} value={this.props.comment} />
-                            <br />
-                            <input className="btn btn-success" type="submit" value="Update Comment" />
-                            </form>
-                            </details>
-                            </li>
+              <summary>
+                  <i className="fas fa-pencil-alt"></i>
+              </summary>
+              <form onSubmit={this.props.updateComment} id={comment._id}>
+                <label className="form-group" htmlFor="comment">Title: </label>
+                  <br />
+                  <input className="form-control" type="textarea" id="comment" onChange={this.props.handleChange} value={this.props.comment} />
+                  <br />
+                  <input className="btn btn-success" type="submit" value="Update Comment" />
+              </form>
+              </details>
+          </li>
         
         })}
         </ul>

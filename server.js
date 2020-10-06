@@ -33,10 +33,19 @@ app.use(express.static('public'))
 
 // ROUTES / CONTROLLERS
 const commentsController = require('./controllers/comments_controller.js')
-app.use('/', commentsController)
-app.get('/', (req, res) => {
+app.use('/comments', commentsController)
+app.get('/comments', (req, res) => {
     res.send('Hello World')
 })
+
+
+const mainController = require('./controllers/office_controllers.js')
+app.use('/office', mainController)
+// app.get('/', (req, res) => {
+//   res.send('Hello World')
+// })
+
+
 
 // LISTENER
 app.listen(PORT, () => {
