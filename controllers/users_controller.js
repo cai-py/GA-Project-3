@@ -12,8 +12,8 @@ users.post('/new', (req, res) => {
 })
 
 users.get('/seed', (req,res) => {
-    User.create(usersSeed, (err, manyUsers) => {
-        res.redirect('/')
+    User.insertMany(usersSeed, (err, manyUsers) => {
+        res.json(res.body)
     })
 })
 
