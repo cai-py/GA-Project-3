@@ -32,7 +32,7 @@ comment.get('/', (req, res) => {
 comment.post('/new', (req, res) => {
     Comment.create(req.body, (err, createdComment) => {
         Comment.find({}, (err, foundComment) => {
-            res.json(req.body) 
+            res.json(foundComment) 
         })
     })
 })
