@@ -6,14 +6,14 @@ const usersSeed = require('../models/users_seed.js')
 users.post('/new', (req, res) => {
     User.create(req.body, (err, createdUser) => {
         User.find({}, (err, foundUser) => {
-            res.json(foundUser) 
+            res.json(req.body) 
         })
     })
 })
 
 users.get('/seed', (req,res) => {
     User.insertMany(usersSeed, (err, manyUsers) => {
-        res.json(res.body)
+        res.json(req.body)
     })
 })
 
