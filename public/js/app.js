@@ -6,8 +6,8 @@ class App extends React.Component {
     comments: {},
     comment: "",
     character: {},
-    users: []
-
+    users: {},
+    login: false
   }
 
   componentDidMount = () => {
@@ -18,7 +18,6 @@ class App extends React.Component {
         })
         // console.log(response.data)
       })
-    
   }
 
   newQuote = (event) => {
@@ -44,10 +43,15 @@ class App extends React.Component {
     })
   }
 
+  change = event => {
+    this.setState({[event.target.id]: event.target.value})
+  }
+
   login = (event) => {
+    this.setState({username: event.target.username.value, login: true})
     event.preventDefault()
     // console.log(event.target.username.value)
-    this.setState({username: event.target.username.value})
+    
     axios
       .post('/user/new', this.state)
       .then(response =>
@@ -56,7 +60,6 @@ class App extends React.Component {
         })
         
       )
-    console.log(response.data)
   }
 
   reset = () => {
@@ -93,10 +96,11 @@ class App extends React.Component {
   render = () => {
       return(
           <div className="container">
-            {(this.state.username === null)
+            {(this.state.login === false)
               ?<div>
                 <Login
-                  login={this.login}>
+                  login={this.login}
+                  change={this.change}>
                 </Login>
                 {/* <button onClick={this.login}>Login</button> */}
               </div>
@@ -131,7 +135,7 @@ class Login extends React.Component {
       <div className="login-container">
         <form onSubmit={this.props.login}>
           <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username"></input>
+          <input type="text" id="username" name="username" onChange={this.props.change}></input>
 
           <input type="submit" value="play"/>
         </form>
@@ -289,7 +293,7 @@ class Comment extends React.Component {
           <h2  id="postedComments" className="text-center">Comments</h2>
           {this.props.comments.map(comment => {
             return <div>
-            <h5>{comment.comment}</h5>
+            <h5 key={comment._id}>{comment.comment}</h5>
 
             </div>
           })}
