@@ -3,7 +3,7 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: 'hello',
     content: {},
-    comments: []
+    comments: [],
     character: {},
     users: []
 
@@ -39,12 +39,12 @@ class App extends React.Component {
     this.setState({username: event.target.username.value})
     axios
       .post('/user/new', this.state)
-      .then(response => 
+      .then(response =>
         this.setState({
           users: response.data
         })
       )
-    
+
   }
 
   reset = () => {
@@ -74,7 +74,7 @@ class App extends React.Component {
             }
       )}
   )}
-  
+
   //ON COMMENT SUBMIT
   handleSubmit = event => {
     event.preventDefault()
@@ -129,9 +129,9 @@ class App extends React.Component {
                 </Quote>
                 <Comment>
                 </Comment>
-                
-                
-                
+
+
+
               </div>
             }
       </div>
@@ -150,7 +150,7 @@ class Login extends React.Component {
           <input type="submit" value="play"/>
         </form>
       </div>
-      
+
     )
   }
 }
@@ -271,9 +271,9 @@ class Comment extends React.Component {
         <br />
         &nbsp;
            <button type="submit" className="btn btn-primary" >Submit</button>
-           </form> 
+           </form>
            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-           
+
            <h2 id="postedComments" className="text-center">Comments</h2>
            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
        </div>
@@ -301,10 +301,10 @@ class DeleteAndEdit extends React.Component {
               </form>
               </details>
           </li>
-        
+
         })}
         </ul>
-        
+
     }
 }
 
