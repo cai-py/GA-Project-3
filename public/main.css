@@ -1,0 +1,65 @@
+/* * {
+  border: solid gold;
+} */
+
+body {
+  text-align: center
+}
+
+/*nav*/
+.nav-container {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+
+  display: flex;
+}
+
+.navImg {
+  width: 110px;
+  float: left;
+}
+
+.welcome {
+  color: whitesmoke;
+  border: 3px solid green;
+
+  margin: auto;
+}
+
+
+/*quote*/
+
+.quote-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.quote-text {
+  height: 150px;
+}
+
+
+#formbtn {
+    display: flex;
+    align-self: flex-end;
+}
+
+
+/*options*/
+
+.options-container div{
+  width: 90%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+
+.btn {
+  border: black 1px solid;
+  margin: 1em 5px;
+}
