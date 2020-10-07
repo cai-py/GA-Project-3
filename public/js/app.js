@@ -1,10 +1,12 @@
 class App extends React.Component {
   state = {
     chosenCharacterId: null,
-    username: null,
+    username: 'hello',
     content: {},
+    comments: []
     character: {},
     users: []
+
   }
 
 
@@ -52,6 +54,50 @@ class App extends React.Component {
     })
     this.newQuote()
   }
+
+  //DELETE -- DELETE COMMENT
+    deleteComment = (event) => {
+        event.preventDefault()
+        axios.delete('/:id' + event.target.value).then(response =>
+        this.setState({
+            comment: response.data
+        })
+      )}
+
+    updateComment = (event) => {
+        event.preventDefault()
+        const id = event.target.id
+        axios.put('/:id' + id, this.state).then(response => {
+            this.setState({
+                comment: response.data,
+                officeCharacters: '',
+            }
+      )}
+  )}
+  
+  //ON COMMENT SUBMIT
+  handleSubmit = event => {
+    event.preventDefault()
+    axios
+        .post('/office', this.state)
+        .then(response => this.setState({
+          comments: response.data,
+          chosenCharacterId: null,
+            username: '',
+            content: '',
+            character: '',
+            answers: '',
+
+        }))
+    }
+
+  //ON COMMENT CHANGE
+  handleChange = event => {
+        this.setState({
+          [event.target.id]: event.target.value
+        })
+      }
+
   //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
   render = () => {
       return(
@@ -81,6 +127,11 @@ class App extends React.Component {
                   index2={this.state.randomChar2}
                   officeCharacters={this.state.officeCharacters}>
                 </Quote>
+                <Comment>
+                </Comment>
+                
+                
+                
               </div>
             }
       </div>
@@ -105,7 +156,6 @@ class Login extends React.Component {
 }
 
 
-
 class Nav extends React.Component {
 render = () => {
   return <div className="nav-container">
@@ -115,7 +165,7 @@ render = () => {
     <li className="navLi"><a href="#">Log In</a></li> */}
     <p className="welcome">Welcome, {this.props.username}</p>
   </div>
-}
+  }
 }
 
 const findRandom = (max) => {
@@ -149,8 +199,6 @@ class Quote extends React.Component {
 
 }
 
-
-
  decrease = () => {
  this.setState({ score: this.state.score - 100 })
   }
@@ -178,6 +226,8 @@ increase = () => {
       showQuestion: !this.state.showQuestion
     })
   }
+
+
 render = () => {
   return(
       <div className="play">
@@ -204,10 +254,93 @@ render = () => {
               : null
           }
       </div>
-  )
-}
+    )
+  }
 }
 
+
+class Comment extends React.Component {
+    render = () => {
+        return <div className="create-container">
+            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+             <form onSubmit={this.props.handleSubmit}>
+            <h2 id="NewC"className="text-center">New Comment</h2>
+            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+        <label htmlFor="content"></label>
+        <textarea className="form-control" id="content" rows="3" placeholder="Your comment goes here" onChange={this.props.handleChange}/>
+        <br />
+        &nbsp;
+           <button type="submit" className="btn btn-primary" >Submit</button>
+           </form> 
+           <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+           
+           <h2 id="postedComments" className="text-center">Comments</h2>
+           <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+       </div>
+    }
+}
+
+class DeleteAndEdit extends React.Component {
+    render = () => {
+        <ul>
+            {this.props.comments.map(comment => {
+        return <li key={comment._id}>
+            <p>{comment.comment}</p>
+            <button className="btn btn-danger" value={comment._id} onClick={this.props.deleteComment}>Delete
+            </button>
+            <details>
+              <summary>
+                  <i className="fas fa-pencil-alt"></i>
+              </summary>
+              <form onSubmit={this.props.updateComment} id={comment._id}>
+                <label className="form-group" htmlFor="comment">Title: </label>
+                  <br />
+                  <input className="form-control" type="textarea" id="comment" onChange={this.props.handleChange} value={this.props.comment} />
+                  <br />
+                  <input className="btn btn-success" type="submit" value="Update Comment" />
+              </form>
+              </details>
+          </li>
+        
+        })}
+        </ul>
+        
+    }
+}
+
+class Scoreboard extends React.Component {
+    state = {
+        score: 0
+    }
+    updateScore = (event) => {
+        let action = event.target.id
+        switch (action) {
+            case 'decrease':
+                this.setState({ score: this.state.score - 1 })
+                break
+            case 'increase':
+                this.setState({ score: this.state.score + 1 })
+                break
+            case 'reset':
+                this.setState({ score: 0 })
+                break
+            default:
+                break
+        }
+    }
+    render = () => {
+        return (
+            <div className="scoreboard">
+                <h2>Current Score: {this.state.score}</h2>
+                <div className="score-buttons">
+                    <button id="decrease" onClick={this.updateScore}>Decrease</button>
+                    <button id="increase" onClick={this.updateScore}>Increase</button>
+                    <button id="reset" onClick={this.updateScore}>Reset</button>
+                </div>
+            </div>
+        )
+    }
+}
 ReactDOM.render(
 <App/>,
 document.querySelector('main'))

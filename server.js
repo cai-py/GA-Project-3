@@ -32,11 +32,27 @@ app.use(express.json()) //use .json(), not .urlencoded()
 app.use(express.static('public'))
 
 // ROUTES / CONTROLLERS
+
+const commentsController = require('./controllers/comments_controller.js')
+app.use('/comments', commentsController)
+app.get('/comments', (req, res) => {
+    res.send('Hello World')
+})
+
 const officeController = require('./controllers/office_controllers.js')
 app.use('/office', officeController)
 
 const usersController = require('./controllers/users_controller.js')
 app.use('/user', usersController)
+
+
+
+const mainController = require('./controllers/office_controllers.js')
+app.use('/office', mainController)
+// app.get('/', (req, res) => {
+//   res.send('Hello World')
+// })
+
 
 
 // LISTENER
