@@ -276,30 +276,32 @@ render = () => {
 
 
 class Comment extends React.Component {
-    render = () => {
-        return <div className="create-container">
+  render = () => {
+      return <div className="create-container">
+        {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
+        <form onSubmit={this.handleSubmit}>
+          <h2 id="NewC"className="text-center">New Comment</h2>
           {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
-          <form onSubmit={this.handleSubmit}>
-            <h2 id="NewC"className="text-center">New Comment</h2>
-            {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
-            <label htmlFor="comment"></label>
-            <input className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
-            
-            {/* <button type="submit" className="btn btn-primary" >Submit</button> */}
-            <input type="submit" value="Comment"/>
-          </form>
-          {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
+          <label htmlFor="comment"></label>
+          <input className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
+          
+          {/* <button type="submit" className="btn btn-primary" >Submit</button> */}
+          <input className="btn btn-primary" type="submit" value="Comment"/>
+        </form>
+        {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
 
-          <h2  id="postedComments" className="text-center">Comments</h2>
-          {this.props.comments.map(comment => {
-            return <div>
-            <h5 key={comment._id}>{comment.comment}</h5>
+        <h2  id="postedComments" className="text-center">Comments</h2>
+        {this.props.comments.map(comment => {
+          return <div>
+          <h5 key={comment._id}>{comment.comment}</h5>
 
-            </div>
-          })}
-          <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-       </div>
-    }
+          </div>
+        })}
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+      </div>
+  }
+
+  
 
   handleSubmit = event => {
     event.preventDefault()
