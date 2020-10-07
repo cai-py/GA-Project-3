@@ -3,9 +3,10 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: 'hello',
     content: {},
-    character: "",
-    answers: [],
     comments: []
+    character: {},
+    users: []
+
   }
 
 
@@ -33,8 +34,17 @@ class App extends React.Component {
   }
 
   login = (event) => {
+    event.preventDefault()
     // console.log(event.target.username.value)
     this.setState({username: event.target.username.value})
+    axios
+      .post('/user/new', this.state)
+      .then(response => 
+        this.setState({
+          users: response.data
+        })
+      )
+    
   }
 
   reset = () => {
@@ -94,6 +104,9 @@ class App extends React.Component {
           <div className="container">
             {(this.state.username === null)
               ?<div>
+                <Login
+                  login={this.login}>
+                </Login>
                 {/* <button onClick={this.login}>Login</button> */}
                 <form onSubmit={this.login}>
                   <label htmlFor="username">Username</label>
@@ -121,9 +134,24 @@ class App extends React.Component {
                 
               </div>
             }
+      </div>
+    )
+  }
+}
 
-          </div>
-      )
+class Login extends React.Component {
+  render = () => {
+    return (
+      <div className="login-container">
+        <form onSubmit={this.props.login}>
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" name="username"></input>
+
+          <input type="submit" value="play"/>
+        </form>
+      </div>
+      
+    )
   }
 }
 
