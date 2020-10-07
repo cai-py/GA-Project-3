@@ -9,11 +9,11 @@ const PORT = process.env.PORT || 3005
 
 // DATABASE
 const MONGODB_URI = process.env.MONGODB_URI
-// mongoose.connect(MONGODB_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false
-// })
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
 // Connect to Mongo
 mongoose.connect(MONGODB_URI  ,  { useNewUrlParser: true});
 
