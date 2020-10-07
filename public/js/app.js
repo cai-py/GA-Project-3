@@ -1,39 +1,13 @@
 class App extends React.Component {
-    state = {
-      officeCharacters: null,
-      chosenCharacterId: null,
-      username: 'hello',
-      content: {},
-      character: {},
-      comment: []
-    }
-
-  componentDidMount = () => {
-    axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(
-      (response) => {
-        this.setState(
-          {
-            officeCharacters: response.data.data,
-            randomChar1:findRandom(response.data.data.length),
-            character:response.data.data.character,
-            randomChar2:findRandom(response.data.data.length),
-            randomChar3:findRandom(response.data.data.length)
-          }
-        )
-        // console.log(this.state.officeCharacters)
-      }
-    )
-    axios.get("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(
-      (response) => {
-        this.setState(
-          {
-            content:response.data.data,
-            character:response.data.data.character,
-          }
-        )
-      }
-    )
+  state = {
+    chosenCharacterId: null,
+    username: 'hello',
+    content: {},
+    character: "",
+    answers: [],
+    comments: []
   }
+
 
   newQuote = (event) => {
     // event.preventDefault();
@@ -49,6 +23,7 @@ class App extends React.Component {
     )
   }
 
+
   checkAnswer = (event) => {
     event.preventDefault()
     const id = event.target.id
@@ -58,7 +33,7 @@ class App extends React.Component {
   }
 
   login = (event) => {
-    console.log(event.target.username.value)
+    // console.log(event.target.username.value)
     this.setState({username: event.target.username.value})
   }
 
@@ -94,9 +69,15 @@ class App extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
     axios
-        .post('/', this.state)
+        .post('/office', this.state)
         .then(response => this.setState({
-          comment: response.data
+          comments: response.data,
+          chosenCharacterId: null,
+            username: '',
+            content: '',
+            character: '',
+            answers: '',
+
         }))
     }
 
@@ -122,33 +103,22 @@ class App extends React.Component {
                 </form>
               </div>
               :<div>
-                {console.log(this.state.character)}
                 <Nav
                   username={this.state.username}>
                 </Nav>
                 <Quote
                   quote={this.state.content.content}
-                  firstname={this.state.character.firstname}
-                  lastname={this.state.character.lastname}
-                  findData={this.findData}>
-                </Quote>
-                <Options
+                  findData={this.findData}
                   index1={this.state.randomChar1}
-                  correctfirst={this.state.character.firstname}
-                  correctlast={this.state.character.lastname}
+                  character={this.state.character}
                   index2={this.state.randomChar2}
-                  index3={this.state.randomChar3}
-                  officeCharacters={this.state.officeCharacters}
-                  quoteCharacterId={this.state.character._id}
-                  chosenCharacterId={this.state.chosenCharacterId}
-                  checkAnswer={this.checkAnswer}
-                  newQuote={this.newQuote}
-                  reset={this.reset}>
-                </Options>
-                <Scoreboard>
-                </Scoreboard>
+                  officeCharacters={this.state.officeCharacters}>
+                </Quote>
                 <Comment>
                 </Comment>
+                
+                
+                
               </div>
             }
 
@@ -170,55 +140,93 @@ render = () => {
   }
 }
 
-class Quote extends React.Component {
-render = () => {
-  return <div className="quote-container">
-    <dl>
-      <dt>Quote:</dt>
-      <dd className="quote-text">{this.props.quote}</dd>
-
-      {/* <dt>Answer</dt>
-      <dd>{this.props.firstname} {this.props.lastname}</dd> */}
-    </dl>
-  </div>
-
-  }
-}
-
 const findRandom = (max) => {
 return Math.floor(Math.random() * max)
 }
 
-class Options extends React.Component {
+
+
+class Quote extends React.Component {
+  state = {
+    showQuestion: false,
+    quote: {},
+    officeCharacters: null,
+    score: 0
+  }
+
+  getQuote = () => {
+    axios("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(quote => {
+      this.setState({
+        quote:quote.data.data,
+        showQuestion: false,
+      })
+    })
+    axios("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(char => {
+      this.setState({
+        officeCharacters: char.data.data,
+        randomChar1:findRandom(char.data.data.length),
+        randomChar2:findRandom(char.data.data.length),
+      })
+    })
+
+}
+
+ decrease = () => {
+ this.setState({ score: this.state.score - 100 })
+  }
+
+
+increase = () => {
+  this.setState({ score: this.state.score + 100 })
+  }
+
+
+  rightAnswer = () => {
+    alert('Nice, thats the correct answer')
+    this.getQuote()
+    this.increase()
+  }
+
+  wrongAnswer = () => {
+    alert('Wrong Answer')
+    this.getQuote()
+    this.decrease()
+  }
+
+  toggleQuote = () => {
+    this.setState({
+      showQuestion: !this.state.showQuestion
+    })
+  }
+
+
 render = () => {
-  return <div className="options-container">
-    {(this.props.officeCharacters === null) ? null:
-      <div>
-      <div>
-      <button>{this.props.officeCharacters[this.props.index1].firstname} {this.props.officeCharacters[this.props.index1].lastname}
-      </button>
-        <button>
-        {this.props.correctfirst} {this.props.correctlast}
-        </button>
-        <button>
-        {this.props.officeCharacters[this.props.index2].firstname} {this.props.officeCharacters[this.props.index2].lastname}
-        </button>
-        <button>
-        {this.props.officeCharacters[this.props.index3].firstname} {this.props.officeCharacters[this.props.index3].lastname}
-        </button>
-        </div><br/>
-        {this.props.officeCharacters.map(character => {return(
-          <button key={character._id} id={character._id} onClick={this.props.checkAnswer}>{character.firstname} {character.lastname}</button>
-        )})}
-        {(this.props.chosenCharacterId === this.props.quoteCharacterId)
-          ?alert('correct')
-          :null
-        }
+  return(
+      <div className="play">
+        <div>
+        <h2><span>Current Score:</span> {this.state.score}</h2>
+        </div>
+          <h2><span>Let's Play!</span></h2>
+          <button className="btn btn-outline-secondary" onClick={this.getQuote}>Get Trivia!</button><br/>
+          {/* checks if a question exists first before rendering the info */ }
+          { this.state.quote.content
+              ? <div>
+                  <h3><span>Quote:</span></h3> {this.state.quote.content}<br/>
+                  <button className="btn btn-outline-secondary" onClick={this.toggleQuote}>Show Answer</button>
+                <div>
+                  <button className="btn btn-outline-success" id="button1" onClick={this.wrongAnswer} >{this.state.officeCharacters[this.state.randomChar1].firstname} {this.state.officeCharacters[this.state.randomChar1].lastname}</button>
+                  <button className="btn btn-outline-success" id="button2" onClick={this.rightAnswer}>{this.state.quote.character.firstname} {this.state.quote.character.lastname}</button>
+                  <button className="btn btn-outline-success" id="button3" onClick={this.wrongAnswer}>{this.state.officeCharacters[this.state.randomChar2].firstname} {this.state.officeCharacters[this.state.randomChar2].lastname}</button>
+                </div>
+                  { this.state.showQuestion
+                      ? <div><h3><span>Answer:</span></h3> {this.state.quote.character.firstname} {this.state.quote.character.lastname}</div>
+                      : null
+                  }
+                </div>
+              : null
+          }
       </div>
-
-      }
-
-  </div>
+    )
   }
 }
 
@@ -247,7 +255,7 @@ class Comment extends React.Component {
 class DeleteAndEdit extends React.Component {
     render = () => {
         <ul>
-            {this.state.comment.map(comment => {
+            {this.props.comments.map(comment => {
         return <li key={comment._id}>
             <p>{comment.comment}</p>
             <button className="btn btn-danger" value={comment._id} onClick={this.props.deleteComment}>Delete
@@ -308,3 +316,20 @@ class Scoreboard extends React.Component {
 ReactDOM.render(
 <App/>,
 document.querySelector('main'))
+
+
+/*}  this.state.answers.push(this.state.officeCharacters[this.state.randomChar1].firstname +this.state.officeCharacters[this.state.randomChar1].lastname)
+  this.state.answers.push(this.state.quote.character.firstname+ this.state.quote.character.lastname)
+  this.state.answers.push(this.state.officeCharacters[this.state.randomChar2].firstname+ this.state.officeCharacters[this.state.randomChar2].lastname)*/
+    // console.log(this.state.answers);
+
+//   $(() => {
+//     const answers = $('.answers')
+//     console.log(answers.children());
+//     const child = answers.children()
+//     child.detach().sort((a, b) => {
+//       return a - b
+//     })
+//     answers.append(child)
+//   })
+// }

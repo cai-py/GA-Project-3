@@ -2,6 +2,10 @@
   border: solid gold;
 } */
 
+body {
+  text-align: center
+}
+
 /*nav*/
 .nav-container {
   margin: 0;
@@ -53,4 +57,12 @@
   flex-flow: row wrap;
   justify-content: space-around;
 }
+<<<<<<< HEAD
 >>>>>>> 0999e2923711d3ed0eb9a44b774b3aa7159fc56d
+=======
+
+.btn {
+  border: black 1px solid;
+  margin: 1em 5px;
+}
+>>>>>>> 8b965fb5bf7e8b37a8ad62595445f827ddf2051b
