@@ -1,9 +1,10 @@
 class App extends React.Component {
   state = {
     chosenCharacterId: null,
-    username: 'hello',
+    username: null,
     content: {},
     comments: [],
+    comment: "",
     character: {},
     users: []
 
@@ -76,27 +77,6 @@ class App extends React.Component {
   )}
 
   //ON COMMENT SUBMIT
-  handleSubmit = event => {
-    event.preventDefault()
-    axios
-        .post('/office', this.state)
-        .then(response => this.setState({
-          comments: response.data,
-          chosenCharacterId: null,
-            username: '',
-            content: '',
-            character: '',
-            answers: '',
-
-        }))
-    }
-
-  //ON COMMENT CHANGE
-  handleChange = event => {
-        this.setState({
-          [event.target.id]: event.target.value
-        })
-      }
 
   //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
   render = () => {
@@ -108,12 +88,6 @@ class App extends React.Component {
                   login={this.login}>
                 </Login>
                 {/* <button onClick={this.login}>Login</button> */}
-                <form onSubmit={this.login}>
-                  <label htmlFor="username">Username</label>
-                  <input type="text" id="username"></input>
-
-                  <input type="submit" value="play"/>
-                </form>
               </div>
               :<div>
                 <Nav
@@ -128,6 +102,7 @@ class App extends React.Component {
                   officeCharacters={this.state.officeCharacters}>
                 </Quote>
                 <Comment>
+
                 </Comment>
 
 
@@ -179,24 +154,48 @@ class Quote extends React.Component {
     showQuestion: false,
     quote: {},
     officeCharacters: null,
-    score: 0
+    score: 0,
+    newchar1: "",
+    newchar2: "",
+    newchar3: ""
   }
 
   getQuote = () => {
     axios("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/quotes/random").then(quote => {
+
       this.setState({
         quote:quote.data.data,
         showQuestion: false,
       })
-    })
-    axios("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(char => {
-      this.setState({
-        officeCharacters: char.data.data,
-        randomChar1:findRandom(char.data.data.length),
-        randomChar2:findRandom(char.data.data.length),
+      axios("https://cors-anywhere.herokuapp.com/https://officeapi.dev/api/characters").then(char => {
+        console.log('hello');
+        this.setState({
+          officeCharacters: char.data.data,
+          randomChar1:findRandom(char.data.data.length),
+          randomChar2:findRandom(char.data.data.length),
+          /*character1:this.state.officeCharacters[this.state.randomChar1].firstname+ this.state.officeCharacters[this.state.randomChar1].lastname,
+          character2: this.state.quote.character.firstname+ this.state.quote.character.lastname*/
+        })
+        ;
+        this.randomize()
       })
     })
 
+
+}
+
+randomize = () => {
+  let char1 = this.state.officeCharacters[this.state.randomChar1].firstname + ' ' +  this.state.officeCharacters[this.state.randomChar1].lastname
+  let char2 = this.state.quote.character.firstname + ' ' + this.state.quote.character.lastname
+  let char3 = this.state.officeCharacters[this.state.randomChar2].firstname + ' ' + this.state.officeCharacters[this.state.randomChar2].lastname
+
+  const charArr = [char1, char2, char3].sort()
+  this.setState({
+    newchar1: charArr[2],
+    newchar2: charArr[1],
+    newchar3: charArr[0]
+  })
+  console.log(charArr);
 }
 
  decrease = () => {
@@ -209,17 +208,18 @@ increase = () => {
   }
 
 
-  rightAnswer = () => {
-    alert('Nice, thats the correct answer')
-    this.getQuote()
+checkAnswer = () => {
+  if (event.target.value === this.state.quote.character.firstname + " " + this.state.quote.character.lastname) {
+    alert('correct answer')
     this.increase()
+    this.getQuote()
+  } else {
+    alert('wrong answer')
+    this.decrease()
+    this.getQuote()
   }
 
-  wrongAnswer = () => {
-    alert('Wrong Answer')
-    this.getQuote()
-    this.decrease()
-  }
+}
 
   toggleQuote = () => {
     this.setState({
@@ -242,9 +242,9 @@ render = () => {
                   <h3><span>Quote:</span></h3> {this.state.quote.content}<br/>
                   <button className="btn btn-outline-secondary" onClick={this.toggleQuote}>Show Answer</button>
                 <div>
-                  <button className="btn btn-outline-success" id="button1" onClick={this.wrongAnswer} >{this.state.officeCharacters[this.state.randomChar1].firstname} {this.state.officeCharacters[this.state.randomChar1].lastname}</button>
-                  <button className="btn btn-outline-success" id="button2" onClick={this.rightAnswer}>{this.state.quote.character.firstname} {this.state.quote.character.lastname}</button>
-                  <button className="btn btn-outline-success" id="button3" onClick={this.wrongAnswer}>{this.state.officeCharacters[this.state.randomChar2].firstname} {this.state.officeCharacters[this.state.randomChar2].lastname}</button>
+                 <button className="btn btn-outline-success" id="button1" value={this.state.newchar1} onClick={this.checkAnswer}>{this.state.newchar1}</button>
+                  <button className="btn btn-outline-success" value={this.state.newchar2} id="button2" onClick={this.checkAnswer}>{this.state.newchar2}</button>
+                  <button className="btn btn-outline-success" value={this.state.newchar3} id="button3" onClick={this.checkAnswer}>{this.state.newchar3}</button>
                 </div>
                   { this.state.showQuestion
                       ? <div><h3><span>Answer:</span></h3> {this.state.quote.character.firstname} {this.state.quote.character.lastname}</div>
@@ -259,91 +259,68 @@ render = () => {
 }
 
 
+
 class Comment extends React.Component {
+ state = {
+   comments: []
+  }
+
     render = () => {
         return <div className="create-container">
             <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-             <form onSubmit={this.props.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <h2 id="NewC"className="text-center">New Comment</h2>
             <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
         <label htmlFor="content"></label>
-        <textarea className="form-control" id="content" rows="3" placeholder="Your comment goes here" onChange={this.props.handleChange}/>
+        <textarea className="form-control" id="comment" rows="3" placeholder="Your comment goes here" onChange={this.handleChange}/>
         <br />
         &nbsp;
            <button type="submit" className="btn btn-primary" >Submit</button>
            </form>
            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
 
-           <h2 id="postedComments" className="text-center">Comments</h2>
+           <h2  id="postedComments" className="text-center">Comments</h2>
+           {this.state.comments.map(comment => {
+             return <div>
+             <h5 key="key">{comment}</h5>
+
+             </div>
+           })}
            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
        </div>
     }
-}
 
-class DeleteAndEdit extends React.Component {
-    render = () => {
-        <ul>
-            {this.props.comments.map(comment => {
-        return <li key={comment._id}>
-            <p>{comment.comment}</p>
-            <button className="btn btn-danger" value={comment._id} onClick={this.props.deleteComment}>Delete
-            </button>
-            <details>
-              <summary>
-                  <i className="fas fa-pencil-alt"></i>
-              </summary>
-              <form onSubmit={this.props.updateComment} id={comment._id}>
-                <label className="form-group" htmlFor="comment">Title: </label>
-                  <br />
-                  <input className="form-control" type="textarea" id="comment" onChange={this.props.handleChange} value={this.props.comment} />
-                  <br />
-                  <input className="btn btn-success" type="submit" value="Update Comment" />
-              </form>
-              </details>
-          </li>
+    handleSubmit = event => {
+      event.preventDefault()
+      event.currentTarget.reset()
+      this.setState({
+        comments: [...this.state.comments,this.state.comment]
+      })
+          console.log(this.state.comment);
+      }
 
-        })}
-        </ul>
-
-    }
-}
-
-class Scoreboard extends React.Component {
-    state = {
-        score: 0
-    }
-    updateScore = (event) => {
-        let action = event.target.id
-        switch (action) {
-            case 'decrease':
-                this.setState({ score: this.state.score - 1 })
-                break
-            case 'increase':
-                this.setState({ score: this.state.score + 1 })
-                break
-            case 'reset':
-                this.setState({ score: 0 })
-                break
-            default:
-                break
+    //ON COMMENT CHANGE
+    handleChange = event => {
+          this.setState({
+            [event.target.id]: event.target.value
+          })
         }
-    }
-    render = () => {
-        return (
-            <div className="scoreboard">
-                <h2>Current Score: {this.state.score}</h2>
-                <div className="score-buttons">
-                    <button id="decrease" onClick={this.updateScore}>Decrease</button>
-                    <button id="increase" onClick={this.updateScore}>Increase</button>
-                    <button id="reset" onClick={this.updateScore}>Reset</button>
-                </div>
-            </div>
-        )
-    }
+
 }
+
+
 ReactDOM.render(
 <App/>,
 document.querySelector('main'))
+
+
+
+
+
+
+
+
+
 
 
 /*}  this.state.answers.push(this.state.officeCharacters[this.state.randomChar1].firstname +this.state.officeCharacters[this.state.randomChar1].lastname)
