@@ -5,10 +5,11 @@ const mongoose = require('mongoose')
 // CONFIGURATION
 const app = express()
 require('dotenv').config()
-const PORT = process.env.PORT || 3004
+const PORT = process.env.PORT || 3000
 
 // DATABASE
 const MONGODB_URI = process.env.MONGODB_URI
+
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -30,21 +31,30 @@ mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
 // MIDDLEWARE
 app.use(express.json()) //use .json(), not .urlencoded()
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: false }))
 
 // ROUTES / CONTROLLERS
+
+const commentsController = require('./controllers/comments_controller.js')
+app.use('/comments', commentsController)
+// app.get('/comments', (req, res) => {
+//     res.send('Hello World')
+// })
+
 const officeController = require('./controllers/office_controllers.js')
 app.use('/office', officeController)
 
 const usersController = require('./controllers/users_controller.js')
 app.use('/user', usersController)
 
-const commentsController = require('./controllers/comments_controller.js')
-app.get('/', (req, res) => {
-  Comment.find({}, (err, foundComment) => {
-    res.json(foundComment)
-  })
-})
-app.use('/', commentsController)
+
+
+// const mainController = require('./controllers/office_controllers.js')
+// app.use('/office', mainController)
+// // app.get('/', (req, res) => {
+// //   res.send('Hello World')
+// // })
+
 
 
 // LISTENER

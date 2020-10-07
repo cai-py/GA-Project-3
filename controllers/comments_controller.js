@@ -1,13 +1,24 @@
 const express = require('express')
-const comments = express.Router()
-const Comment = require("../models/comments_schema")
+const comment = express.Router()
+const Comment = require("../models/comments_schema.js")
+const commentsSeed = require('../models/comments_seed.js')
 
+
+//===========================
+//  SEED ROUTE
+//===========================
+
+comment.get('/seed', (req,res) => {
+    Comment.insertMany(commentsSeed, (err, manyComments) => {
+        res.json(req.body)
+    })
+})
 
 //======================
 //  INDEX ROUTE
 //======================
 
-comments.get('/comments', (req, res) => {
+comment.get('/comments', (req, res) => {
     Comment.find({}, (err, foundComment) => {
         res.json(foundComment)
     })
@@ -18,10 +29,10 @@ comments.get('/comments', (req, res) => {
 // CREATE ROUTE
 //========================
 
-comments.post('/:id', (req, res) => {
+comment.post('/new', (req, res) => {
     Comment.create(req.body, (err, createdComment) => {
         Comment.find({}, (err, foundComment) => {
-            res.json(foundComment)
+            res.json(req.body) 
         })
     })
 })
@@ -30,7 +41,7 @@ comments.post('/:id', (req, res) => {
 //  UPDATE ROUTE
 //=========================
 
-comments.put('/:id', (req, res) => {
+comment.put('/:id', (req, res) => {
     Comment.findByIdAndUpdate(req.params.id, req.body, {
         new: true
     }, (err, updatedComment) => {
@@ -48,7 +59,7 @@ comments.put('/:id', (req, res) => {
 //  DELETE ROUTE
 //===========================
 
-comments.delete('/:id', (req, res) => {
+comment.delete('/:id', (req, res) => {
     Comment.findByIdAndRemove(req.params.id, (err, deletedComment) => {
         Comment.find({}, (err, foundComment) => {
             res.json(foundComment)
@@ -57,4 +68,5 @@ comments.delete('/:id', (req, res) => {
 })
 
 
-module.exports = comments
+// EXPORTS
+module.exports = comment
