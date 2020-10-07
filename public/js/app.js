@@ -3,13 +3,23 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: null,
     content: {},
-    comments: [],
+    comments: {},
     comment: "",
     character: {},
     users: []
 
   }
 
+  componentDidMount = () => {
+    axios
+      .get('/comments').then(response => {
+        this.setState({
+          comments: response.data
+        })
+        // console.log(response.data)
+      })
+    
+  }
 
   newQuote = (event) => {
     // event.preventDefault();
@@ -44,8 +54,9 @@ class App extends React.Component {
         this.setState({
           users: response.data
         })
+        
       )
-
+    console.log(response.data)
   }
 
   reset = () => {
@@ -101,8 +112,8 @@ class App extends React.Component {
                   index2={this.state.randomChar2}
                   officeCharacters={this.state.officeCharacters}>
                 </Quote>
-                <Comment>
-
+                <Comment
+                  comments={this.state.comments}>
                 </Comment>
 
 
@@ -261,50 +272,54 @@ render = () => {
 
 
 class Comment extends React.Component {
- state = {
-   comments: []
-  }
-
     render = () => {
         return <div className="create-container">
-            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+          {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
           <form onSubmit={this.handleSubmit}>
             <h2 id="NewC"className="text-center">New Comment</h2>
-            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-        <label htmlFor="content"></label>
-        <textarea className="form-control" id="comment" rows="3" placeholder="Your comment goes here" onChange={this.handleChange}/>
-        <br />
-        &nbsp;
-           <button type="submit" className="btn btn-primary" >Submit</button>
-           </form>
-           <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+            {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
+            <label htmlFor="comment"></label>
+            <input className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
+            
+            {/* <button type="submit" className="btn btn-primary" >Submit</button> */}
+            <input type="submit" value="Comment"/>
+          </form>
+          {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
 
-           <h2  id="postedComments" className="text-center">Comments</h2>
-           {this.state.comments.map(comment => {
-             return <div>
-             <h5 key="key">{comment}</h5>
+          <h2  id="postedComments" className="text-center">Comments</h2>
+          {this.props.comments.map(comment => {
+            return <div>
+            <h5>{comment.comment}</h5>
 
-             </div>
-           })}
-           <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+            </div>
+          })}
+          <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
        </div>
     }
 
-    handleSubmit = event => {
-      event.preventDefault()
-      event.currentTarget.reset()
-      this.setState({
-        comments: [...this.state.comments,this.state.comment]
-      })
-          console.log(this.state.comment);
-      }
+  handleSubmit = event => {
+    event.preventDefault()
+    event.currentTarget.reset()
+    // this.setState({
+    //   comments: [...this.state.comments,this.state.comment]
+    // })
+    //     console.log(this.state.comment);
+    // }
 
-    //ON COMMENT CHANGE
-    handleChange = event => {
-          this.setState({
-            [event.target.id]: event.target.value
-          })
-        }
+    // //ON COMMENT CHANGE
+    // handleChange = event => {
+    //       this.setState({
+    //         [event.target.id]: event.target.value
+    //       })
+    
+    axios
+      .post('/comments/new', this.state)
+      .then(response =>
+        this.setState({
+          comments: response.data
+        })
+      )
+  }
 
 }
 
