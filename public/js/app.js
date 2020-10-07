@@ -3,9 +3,8 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: 'hello',
     content: {},
-    character: "",
-    answers: [],
-    comments: []
+    character: {},
+    users: []
   }
 
 
@@ -33,8 +32,17 @@ class App extends React.Component {
   }
 
   login = (event) => {
+    event.preventDefault()
     // console.log(event.target.username.value)
     this.setState({username: event.target.username.value})
+    axios
+      .post('/user/new', this.state)
+      .then(response => 
+        this.setState({
+          users: response.data
+        })
+      )
+    
   }
 
   reset = () => {
@@ -45,55 +53,15 @@ class App extends React.Component {
     this.newQuote()
   }
 
-  //DELETE -- DELETE COMMENT
-    deleteComment = (event) => {
-        event.preventDefault()
-        axios.delete('/:id' + event.target.value).then(response =>
-        this.setState({
-            comment: response.data
-        })
-      )}
-
-    updateComment = (event) => {
-        event.preventDefault()
-        const id = event.target.id
-        axios.put('/:id' + id, this.state).then(response => {
-            this.setState({
-                comment: response.data,
-                officeCharacters: '',
-            }
-      )}
-  )}
-  
-  //ON COMMENT SUBMIT
-  handleSubmit = event => {
-    event.preventDefault()
-    axios
-        .post('/office', this.state)
-        .then(response => this.setState({
-          comments: response.data,
-          chosenCharacterId: null,
-            username: '',
-            content: '',
-            character: '',
-            answers: '',
-
-        }))
-    }
-
-  //ON COMMENT CHANGE
-  handleChange = event => {
-        this.setState({
-          [event.target.id]: event.target.value
-        })
-      }
-
   //HOW THE INFO SHOULD DISPLAY ON SCREEN, COMBINING HTML w/ JS USING REACT
   render = () => {
       return(
           <div className="container">
             {(this.state.username === null)
               ?<div>
+                <Login
+                  login={this.login}>
+                </Login>
                 {/* <button onClick={this.login}>Login</button> */}
                 <form onSubmit={this.login}>
                   <label htmlFor="username">Username</label>
@@ -116,14 +84,28 @@ class App extends React.Component {
                 </Quote>
                 <Comment>
                 </Comment>
-                
-                
-                
+                {/* <DeleteAndEdit> 
+                </DeleteAndEdit> */}
               </div>
             }
+      </div>
+    )
+  }
+}
 
-          </div>
-      )
+class Login extends React.Component {
+  render = () => {
+    return (
+      <div className="login-container">
+        <form onSubmit={this.props.login}>
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" name="username"></input>
+
+          <input type="submit" value="play"/>
+        </form>
+      </div>
+      
+    )
   }
 }
 
@@ -232,14 +214,41 @@ render = () => {
 
 
 class Comment extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {comments: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
+  handleChange = (event) => {
+    this.setState({
+      comments: event.target.value
+    })
+  }
+
+  handleSubmit = event => {
+    event.preventDefault() 
+    // fetch(this.props.formAction)
+    // axios
+    //   .post('/:id', this.props.comments)
+    //   .then
+    //   (response => this.setState({
+    //     comments: response.data
+    //   }))
+      alert("a name" + this.state.comments);
+  }
+
+
     render = () => {
         return <div className="create-container">
             <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-             <form onSubmit={this.props.handleSubmit}>
+             <form onSubmit={this.handleSubmit}>
             <h2 id="NewC"className="text-center">New Comment</h2>
             <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
         <label htmlFor="content"></label>
-        <textarea className="form-control" id="content" rows="3" placeholder="Your comment goes here" onChange={this.props.handleChange}/>
+        <textarea className="form-control" id="content" rows="3" placeholder="Your comment goes here" value={this.state.comments}onChange={this.handleChange}/>
         <br />
         &nbsp;
            <button type="submit" className="btn btn-primary" >Submit</button>
@@ -248,11 +257,31 @@ class Comment extends React.Component {
            
            <h2 id="postedComments" className="text-center">Comments</h2>
            <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+           
        </div>
     }
 }
 
 class DeleteAndEdit extends React.Component {
+
+      deleteComment = (event) => {
+        event.preventDefault()
+        axios.delete('/:id' + event.target.value).then(response =>
+          this.setState({
+            comment: response.data
+          })
+        )
+      }
+
+      updateComment = (event) => {
+        event.preventDefault()
+        const id = event.target.id
+        axios.put('/:id' + id, this.state).then(response => {
+          this.setState({
+            comment: response.data
+          })
+        })
+      }
     render = () => {
         <ul>
             {this.props.comments.map(comment => {

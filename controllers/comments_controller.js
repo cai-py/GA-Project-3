@@ -1,5 +1,5 @@
 const express = require('express')
-const comment = express.Router()
+const comments = express.Router()
 const Comment = require("../models/comments_schema")
 
 
@@ -7,7 +7,7 @@ const Comment = require("../models/comments_schema")
 //  INDEX ROUTE
 //======================
 
-comment.get('/', (req, res) => {
+comments.get('/comments', (req, res) => {
     Comment.find({}, (err, foundComment) => {
         res.json(foundComment)
     })
@@ -18,7 +18,7 @@ comment.get('/', (req, res) => {
 // CREATE ROUTE
 //========================
 
-comment.post('/', (req, res) => {
+comments.post('/:id', (req, res) => {
     Comment.create(req.body, (err, createdComment) => {
         Comment.find({}, (err, foundComment) => {
             res.json(foundComment)
@@ -30,7 +30,7 @@ comment.post('/', (req, res) => {
 //  UPDATE ROUTE
 //=========================
 
-comment.put('/:id', (req, res) => {
+comments.put('/:id', (req, res) => {
     Comment.findByIdAndUpdate(req.params.id, req.body, {
         new: true
     }, (err, updatedComment) => {
@@ -48,7 +48,7 @@ comment.put('/:id', (req, res) => {
 //  DELETE ROUTE
 //===========================
 
-comment.delete('/:id', (req, res) => {
+comments.delete('/:id', (req, res) => {
     Comment.findByIdAndRemove(req.params.id, (err, deletedComment) => {
         Comment.find({}, (err, foundComment) => {
             res.json(foundComment)
@@ -57,4 +57,4 @@ comment.delete('/:id', (req, res) => {
 })
 
 
-module.exports = comment
+module.exports = comments
