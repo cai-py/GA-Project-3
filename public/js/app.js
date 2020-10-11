@@ -1,9 +1,9 @@
 class App extends React.Component {
   state = {
     chosenCharacterId: null,
-    username: null,
+    username: "null",
     content: {},
-    comments: null,
+    comments: {},
     comment: "",
     character: {},
     users: {},
@@ -48,8 +48,9 @@ class App extends React.Component {
   }
 
   login = (event) => {
-    this.setState({username: event.target.username.value, login: true})
     event.preventDefault()
+    this.setState({username: event.target.username.value, login: true})
+    
     // console.log(event.target.username.value)
     
     axios
@@ -339,24 +340,3 @@ document.querySelector('main'))
 
 
 
-
-
-
-
-
-
-/*}  this.state.answers.push(this.state.officeCharacters[this.state.randomChar1].firstname +this.state.officeCharacters[this.state.randomChar1].lastname)
-  this.state.answers.push(this.state.quote.character.firstname+ this.state.quote.character.lastname)
-  this.state.answers.push(this.state.officeCharacters[this.state.randomChar2].firstname+ this.state.officeCharacters[this.state.randomChar2].lastname)*/
-    // console.log(this.state.answers);
-
-//   $(() => {
-//     const answers = $('.answers')
-//     console.log(answers.children());
-//     const child = answers.children()
-//     child.detach().sort((a, b) => {
-//       return a - b
-//     })
-//     answers.append(child)
-//   })
-// }
