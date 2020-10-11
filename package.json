@@ -1,6 +1,9 @@
 {
   "name": "ga-project-3",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.11.0"
+  },
   "description": "- cairo",
   "main": "server.js",
   "scripts": {
