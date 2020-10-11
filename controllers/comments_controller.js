@@ -1,7 +1,18 @@
 const express = require('express')
 const comment = express.Router()
-const Comment = require("../models/comments_schema")
+const Comment = require("../models/comments_schema.js")
+const commentsSeed = require('../models/comments_seed.js')
 
+
+//===========================
+//  SEED ROUTE
+//===========================
+
+comment.get('/seed', (req,res) => {
+    Comment.insertMany(commentsSeed, (err, manyComments) => {
+        res.json(req.body)
+    })
+})
 
 //======================
 //  INDEX ROUTE
@@ -18,10 +29,10 @@ comment.get('/', (req, res) => {
 // CREATE ROUTE
 //========================
 
-comment.post('/', (req, res) => {
+comment.post('/new', (req, res) => {
     Comment.create(req.body, (err, createdComment) => {
         Comment.find({}, (err, foundComment) => {
-            res.json(foundComment)
+            res.json(foundComment) 
         })
     })
 })
@@ -57,4 +68,5 @@ comment.delete('/:id', (req, res) => {
 })
 
 
+// EXPORTS
 module.exports = comment
