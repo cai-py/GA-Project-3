@@ -49,7 +49,7 @@ class App extends React.Component {
 
   login = (event) => {
     event.preventDefault()
-    this.setState({username: event.target.username.value, login: true})
+    this.setState({login: true})
     
     // console.log(event.target.username.value)
     
