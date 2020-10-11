@@ -19,7 +19,7 @@ users.post('/new', (req, res) => {
 
 users.get('/seed', (req,res) => {
     User.insertMany(usersSeed, (err, manyUsers) => {
-        res.json(req.body)
+        res.json(manyUsers)
     })
 })
 
