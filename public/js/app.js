@@ -3,7 +3,7 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: null,
     content: {},
-    comments: {},
+    comments: null,
     comment: "",
     character: {},
     users: {},
@@ -70,22 +70,37 @@ class App extends React.Component {
     this.newQuote()
   }
 
+  commentChange = event => {
+    this.setState({[event.target.id]: event.target.value})
+  }
+
+  handleSubmit = event => {
+    event.preventDefault()
+    event.currentTarget.reset()
+    axios
+      .post('/comments/new', this.state)
+      .then(response =>
+        this.setState({
+          comments: response.data
+        })
+      )
+  }
+
   //DELETE -- DELETE COMMENT
     deleteComment = (event) => {
-        event.preventDefault()
-        axios.delete('/:id' + event.target.value).then(response =>
+        axios.delete('comments/' + event.target.value).then(response =>
         this.setState({
-            comment: response.data
+            comments: response.data
         })
       )}
 
     updateComment = (event) => {
         event.preventDefault()
         const id = event.target.id
-        axios.put('/:id' + id, this.state).then(response => {
+        axios.put('/comments/' + id, this.state).then(response => {
             this.setState({
-                comment: response.data,
-                officeCharacters: '',
+                comments: response.data
+
             }
       )}
   )}
@@ -117,7 +132,11 @@ class App extends React.Component {
                   officeCharacters={this.state.officeCharacters}>
                 </Quote>
                 <Comment
-                  comments={this.state.comments}>
+                  comments={this.state.comments}
+                  commentChange={this.commentChange}
+                  handleSubmit={this.handleSubmit}
+                  deleteComment={this.deleteComment}
+                  updateComment={this.updateComment}>
                 </Comment>
 
 
@@ -278,28 +297,38 @@ render = () => {
 class Comment extends React.Component {
   render = () => {
       return <div className="create-container">
-        {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
-        <form onSubmit={this.handleSubmit}>
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+        <form onSubmit={this.props.handleSubmit}>
           <h2 id="NewC"className="text-center">New Comment</h2>
-          {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
+          <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
           <label htmlFor="comment"></label>
-          <input className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
+          <input onChange={this.props.commentChange} className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
           
-          {/* <button type="submit" className="btn btn-primary" >Submit</button> */}
           <input className="btn btn-primary" type="submit" value="Comment"/>
         </form>
-        {/* <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/> */}
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
 
         <h2  id="postedComments" className="text-center">Comments</h2>
         {this.props.comments.map(comment => {
-          return <div>
-          <h5 key={comment._id}>{comment.comment}</h5>
+          return <div className="comment">
+            <p key={comment._id}>{comment.comment}</p>
+            <button value={comment._id} onClick={this.props.deleteComment}>DELETE</button>
 
+            <details>
+              <summary>Edit</summary>
+              <form id={comment._id} onSubmit={this.props.updateComment}>
+                <label htmlFor="comment"></label>
+                <input onChange={this.props.commentChange} name="comment" id="comment" placeholder={comment.comment}/><br />
+
+                <input type="submit" value="update"/>
+              </form>
+            </details>
           </div>
         })}
         <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
       </div>
   }
+<<<<<<< HEAD
 
   
 
@@ -315,6 +344,8 @@ class Comment extends React.Component {
       )
   }
 
+=======
+>>>>>>> 2af484ab8541686523d478c26bc5fcf7134dd299
 }
 
 
