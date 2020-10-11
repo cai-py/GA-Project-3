@@ -51,7 +51,7 @@ class App extends React.Component {
     event.preventDefault()
     this.setState({login: true})
     
-    // console.log(event.target.username.value)
+    console.log(event.target.username.value)
     
     axios
       .post('/user/new', this.state)
