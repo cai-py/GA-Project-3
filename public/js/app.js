@@ -52,14 +52,15 @@ class App extends React.Component {
     this.setState({login: true})
     
     console.log(event.target.username.value)
+    console.log(this.state.username)
     
     axios
       .post('/user/new', this.state)
       .then(response =>
         this.setState({
           users: response.data
-        })
-        
+        }),
+        console.log(response.data)
       )
   }
 
