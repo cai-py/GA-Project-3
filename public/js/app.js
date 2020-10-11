@@ -3,7 +3,7 @@ class App extends React.Component {
     chosenCharacterId: null,
     username: null,
     content: {},
-    comments: null,
+    comments: {},
     comment: "",
     character: {},
     users: {},
@@ -48,8 +48,9 @@ class App extends React.Component {
   }
 
   login = (event) => {
-    this.setState({username: event.target.username.value, login: true})
     event.preventDefault()
+    this.setState({username: event.target.username.value, login: true})
+    
     // console.log(event.target.username.value)
     
     axios
