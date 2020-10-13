@@ -60,7 +60,7 @@ class App extends React.Component {
         this.setState({
           users: response.data
         }),
-        console.log(response.data)
+        // console.log(response.data)
       )
   }
 
@@ -133,13 +133,13 @@ class App extends React.Component {
                   index2={this.state.randomChar2}
                   officeCharacters={this.state.officeCharacters}>
                 </Quote>
-                {/* <Comment
+                <Comment
                   comments={this.state.comments}
                   commentChange={this.commentChange}
                   handleSubmit={this.handleSubmit}
                   deleteComment={this.deleteComment}
                   updateComment={this.updateComment}>
-                </Comment> */}
+                </Comment>
 
 
 
@@ -296,41 +296,41 @@ render = () => {
 
 
 
-// class Comment extends React.Component {
-//   render = () => {
-//       return <div className="create-container">
-//         <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-//         <form onSubmit={this.props.handleSubmit}>
-//           <h2 id="NewC"className="text-center">New Comment</h2>
-//           <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-//           <label htmlFor="comment"></label>
-//           <input onChange={this.props.commentChange} className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
+class Comment extends React.Component {
+  render = () => {
+      return <div className="create-container">
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+        <form onSubmit={this.props.handleSubmit}>
+          <h2 id="NewC"className="text-center">New Comment</h2>
+          <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+          <label htmlFor="comment"></label>
+          <input onChange={this.props.commentChange} className="form-control" name="comment" id="comment" rows="3" placeholder="Your comment goes here"/><br />
           
-//           <input className="btn btn-primary" type="submit" value="Comment"/>
-//         </form>
-//         <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+          <input className="btn btn-primary" type="submit" value="Comment"/>
+        </form>
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
 
-//         <h2  id="postedComments" className="text-center">Comments</h2>
-//         {this.props.comments.map(comment => {
-//           return <div className="comment">
-//             <p key={comment._id}>{comment.comment}</p>
-//             <button value={comment._id} onClick={this.props.deleteComment}>DELETE</button>
+        <h2  id="postedComments" className="text-center">Comments</h2>
+        {this.props.comments.map(comment => {
+          return <div className="comment">
+            <p key={comment._id}>{comment.comment}</p>
+            <button value={comment._id} onClick={this.props.deleteComment}>DELETE</button>
 
-//             <details>
-//               <summary>Edit</summary>
-//               <form id={comment._id} onSubmit={this.props.updateComment}>
-//                 <label htmlFor="comment"></label>
-//                 <input onChange={this.props.commentChange} name="comment" id="comment" placeholder={comment.comment}/><br />
+            <details>
+              <summary>Edit</summary>
+              <form id={comment._id} onSubmit={this.props.updateComment}>
+                <label htmlFor="comment"></label>
+                <input onChange={this.props.commentChange} name="comment" id="comment" placeholder={comment.comment}/><br />
 
-//                 <input type="submit" value="update"/>
-//               </form>
-//             </details>
-//           </div>
-//         })}
-//         <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
-//       </div>
-//   }
-// }
+                <input type="submit" value="update"/>
+              </form>
+            </details>
+          </div>
+        })}
+        <hr className="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s"/>
+      </div>
+  }
+}
 
 
 ReactDOM.render(
